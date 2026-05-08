@@ -1,0 +1,72 @@
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
+      <div>
+        <h2 class="h4 mb-1">{{ park()?.name }}</h2>
+        <p class="text-muted mb-0">Auto-refreshes every 5 minutes</p>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        <small class="text-muted" *ngIf="lastRefreshedAt() as refreshedAt">
+          Updated: {{ refreshedAt | date: 'mediumTime' }}
+        </small>
+        <button class="btn btn-outline-primary btn-sm" type="button" (click)="park() && refreshNow(park()!)">
+          Refresh now
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-6">
+        <input
+          class="form-control"
+          type="search"
+          placeholder="Search attractions"
+          [ngModel]="searchTerm()"
+          (ngModelChange)="onSearchTermChange($event)"
+        />
+      </div>
+      <div class="col-8 col-md-4">
+        <select class="form-select" [ngModel]="sortField()" (ngModelChange)="onSortFieldChange($event)">
+          <option value="waitTime">Sort by wait time</option>
+          <option value="name">Sort by ride name</option>
+        </select>
+      </div>
+      <div class="col-4 col-md-2">
+        <button class="btn btn-outline-secondary w-100" type="button" (click)="toggleSortDirection()">
+          {{ sortDirection() === 'asc' ? 'Asc' : 'Desc' }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="loading()" class="alert alert-info mb-0">Loading wait times...</div>
+    <div *ngIf="errorMessage()" class="alert alert-danger mb-0">{{ errorMessage() }}</div>
+
+    <div *ngIf="!loading() && !errorMessage()" class="table-responsive">
+      <table class="table table-striped table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th scope="col">Ride</th>
+            <th scope="col">Wait time</th>
+            <th scope="col">Status</th>
+            <th scope="col">Last update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ride of filteredRides(); trackBy: trackByRide">
+            <td>{{ ride.name }}</td>
+            <td>{{ ride.waitTime !== null ? (ride.waitTime + ' min') : '—' }}</td>
+            <td>
+              <span class="badge" [class.bg-success]="ride.status === 'Operating'" [class.bg-secondary]="ride.status !== 'Operating'">
+                {{ ride.status }}
+              </span>
+            </td>
+            <td>{{ ride.lastUpdated ? (ride.lastUpdated | date: 'shortTime') : '—' }}</td>
+          </tr>
+          <tr *ngIf="filteredRides().length === 0">
+            <td colspan="4" class="text-center text-muted py-4">No rides match this filter.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
