@@ -1,0 +1,20 @@
+<nav class="navbar bg-primary shadow-sm">
+  <div class="container-fluid d-flex flex-column flex-md-row align-items-md-center gap-2 py-2">
+    <span class="navbar-brand fw-semibold text-white mb-0">Theme Park Wait Times</span>
+    <div class="ms-md-auto d-flex align-items-center gap-2 w-100 w-md-auto">
+      <label class="text-white-50 mb-0 small" for="parkSelector">Park</label>
+      <select
+        id="parkSelector"
+        class="form-select form-select-sm park-select"
+        [ngModel]="selectedParkSlug"
+        (ngModelChange)="onParkSelected($event)"
+      >
+        <option *ngFor="let park of parks" [value]="park.slug">{{ park.name }}</option>
+      </select>
+    </div>
+  </div>
+</nav>
+
+<main class="container py-4">
+  <router-outlet />
+</main>
