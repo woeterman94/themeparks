@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EMPTY, switchMap, timer } from 'rxjs';
 import { ThemeParkConfig } from './theme-park-config';
@@ -11,7 +11,7 @@ type SortField = 'name' | 'waitTime';
 
 @Component({
   selector: 'app-theme-park-page',
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './theme-park-page.html',
   styleUrl: './theme-park-page.scss'
 })
